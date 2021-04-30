@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import App from "./App";
 import "./css/estilos.css";
-
+import "./firebase/conexion";
 ReactDOM.render(
   <React.StrictMode>
     <App />
