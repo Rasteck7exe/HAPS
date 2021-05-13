@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import {
   Formulario,
-  ContenedorTerminos,
   ContenedorCentrado,
   Send,
   Exito,
@@ -14,12 +13,8 @@ import { Title, Div, Log, H1, Cont } from "./elements/baselog";
 import Input from "./components/input";
 const App = () => {
   const [usuario, cambiarUsuario] = useState({ campo: "", valido: null });
-  const [nombre, cambiarNombre] = useState({ campo: "", valido: null });
   const [password, cambiarPassword] = useState({ campo: "", valido: null });
   const [password2, cambiarPassword2] = useState({ campo: "", valido: null });
-  const [correo, cambiarCorreo] = useState({ campo: "", valido: null });
-  const [telefono, cambiarTelefono] = useState({ campo: "", valido: null });
-  const [terminos, cambiarTerminos] = useState(false);
   const [formularioValido, cambiarFormularioValido] = useState(null);
 
   const expresiones = {
@@ -44,28 +39,21 @@ const App = () => {
     }
   };
 
-  const onChangeTerminos = (e) => {
-    cambiarTerminos(e.target.checked);
-  };
+  // const onChangeTerminos = (e) => {
+  //   cambiarTerminos(e.target.checked);
+  // };
 
   const onSubmit = (e) => {
     e.preventDefault();
     if (
       usuario.valido === "true" &&
-      nombre.valido === "true" &&
       password.valido === "true" &&
-      password2.valido === "true" &&
-      correo.valido === "true" &&
-      telefono.valido === "true" &&
-      terminos
+      password2.valido === "true"
     ) {
       cambiarFormularioValido(true);
       cambiarUsuario({ campo: "", valido: "" });
-      cambiarNombre({ campo: "", valido: null });
       cambiarPassword({ campo: "", valido: null });
       cambiarPassword2({ campo: "", valido: "null" });
-      cambiarCorreo({ campo: "", valido: null });
-      cambiarTelefono({ campo: "", valido: null });
     } else {
       cambiarFormularioValido(false);
     }
