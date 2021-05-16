@@ -14,7 +14,6 @@ import Input from "./components/input";
 const App = () => {
   const [usuario, cambiarUsuario] = useState({ campo: "", valido: null });
   const [password, cambiarPassword] = useState({ campo: "", valido: null });
-  const [password2, cambiarPassword2] = useState({ campo: "", valido: null });
   const [formularioValido, cambiarFormularioValido] = useState(null);
 
   const expresiones = {
@@ -25,19 +24,19 @@ const App = () => {
     telefono: /^\d{7,14}$/, // 7 a 14 numeros.
   };
 
-  const validarpswd = () => {
-    if (password.campo.length > 0) {
-      if (password.campo !== password2.campo) {
-        cambiarPassword2((prevState) => {
-          return { ...prevState, valido: "false" };
-        });
-      } else {
-        cambiarPassword2((prevState) => {
-          return { ...prevState, valido: "true" };
-        });
-      }
-    }
-  };
+  // const validarpswd = () => {
+  //   if (password.campo.length > 0) {
+  //     if (password.campo !== password2.campo) {
+  //       cambiarPassword2((prevState) => {
+  //         return { ...prevState, valido: "false" };
+  //       });
+  //     } else {
+  //       cambiarPassword2((prevState) => {
+  //         return { ...prevState, valido: "true" };
+  //       });
+  //     }
+  //   }
+  // };
 
   // const onChangeTerminos = (e) => {
   //   cambiarTerminos(e.target.checked);
@@ -45,15 +44,10 @@ const App = () => {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    if (
-      usuario.valido === "true" &&
-      password.valido === "true" &&
-      password2.valido === "true"
-    ) {
+    if (usuario.valido === "true" && password.valido === "true") {
       cambiarFormularioValido(true);
       cambiarUsuario({ campo: "", valido: "" });
       cambiarPassword({ campo: "", valido: null });
-      cambiarPassword2({ campo: "", valido: "null" });
     } else {
       cambiarFormularioValido(false);
     }
@@ -87,15 +81,6 @@ const App = () => {
               name="password1"
               leyendaError="La contraseña tiene que ser de 4 a 12 dígitos."
               expresionR={expresiones.password}
-            />
-            <Input
-              estado={password2}
-              cambiarEstado={cambiarPassword2}
-              tipo="password"
-              label="Repetir Contraseña"
-              name="password2"
-              leyendaError="Ambas contraseñas deben ser iguales."
-              funcion={validarpswd}
             />
             {formularioValido === false && (
               <Error>
