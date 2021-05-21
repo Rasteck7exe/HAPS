@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Formulario, Send, Exito, Error, SaveUp } from "../elements/pc";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faExclamationTriangle } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 import Input from "../components/input";
-
+import firebase from "../firebase/conexion";
 import {
   Body,
   Aside,
@@ -20,35 +20,66 @@ import {
   BackButtom,
   MenuButtom,
   CarreraTab,
+  SubDiv,
 } from "../elements/basePCadmin";
 import { Link as Lk } from "react-scroll";
 
 const App = () => {
+  const [In, setIn] = useState({ id: "", nombre: "Ingenieria en Software" });
+
   const [carrera, cambiarCarrera] = useState({ campo: "", valido: null });
   const [formularioValido, cambiarFormularioValido] = useState(null);
 
   const expresiones = {
     carrera: /^[a-zA-ZÀ-ÿ\s]{1,40}$/, // Letras y espacios, pueden llevar acentos.
   };
+
+  const [state, setState] = useState([]);
+  useEffect(() => {
+    firebase.db.collection("carrera").onSnapshot((querySnapshot) => {
+      const docs = [];
+      querySnapshot.forEach((doc) => {
+        docs.push({ ...doc.data(), id: doc.id });
+      });
+      setState(docs);
+      console.log(docs);
+    });
+  }, []);
+  const saveCarrera = async (linkObject) => {
+    await firebase.db.collection("carrera").doc().set({ nombre: linkObject });
+    console.log("guardado exitosamente la carrera");
+  };
+
+  const deleteCarrera = async (id) => {
+    await firebase.db.collection("carrera").doc(id).delete();
+  };
+  const actualizarCarrera = async (id, dato) => {
+    await firebase.db.collection("carrera").doc(id).update({ nombre: dato });
+    console.log("Actualiza");
+  };
   const onSubmit = (e) => {
     if (carrera.valido === "true") {
       cambiarFormularioValido(true);
       cambiarCarrera({ campo: "", valido: "" });
+      saveCarrera(carrera.campo);
       e.preventDefault();
     } else {
       cambiarFormularioValido(false);
       e.preventDefault();
     }
   };
-  const onPress = (e) => {
+  const onPress = () => {
     if (carrera.valido === "true") {
       cambiarFormularioValido(true);
       cambiarCarrera({ campo: "", valido: "" });
-      e.preventDefault();
+      actualizarCarrera(In.id, carrera.campo);
     } else {
       cambiarFormularioValido(false);
-      e.preventDefault();
     }
+  };
+  const UpdateIn = async (value) => {
+    setIn(value);
+    console.log(value);
   };
   return (
     <Body>
@@ -117,11 +148,12 @@ const App = () => {
               cambiarEstado={cambiarCarrera}
               tipo="text"
               label="Ingresa Nombre de la Carrera"
-              placeholder="Ingenieria en Software"
+              placeholder={In.nombre}
               name="usuario"
               leyendaError="Solo puede contener numeros, letras y guion bajo."
               expresionR={expresiones.carrera}
             />
+            {console.log(In.nombre)}
             <div />
             {formularioValido === false && (
               <Error>
@@ -133,7 +165,7 @@ const App = () => {
             )}
             <Send type="submit">Registar</Send>
             <SaveUp
-              onKeyPress={() => {
+              onClick={() => {
                 onPress();
               }}
             >
@@ -150,13 +182,19 @@ const App = () => {
           <ItemName></ItemName>
           <ItemName></ItemName>
           {/* Items */}
-          <Items>1</Items>
-          <Lk className="Edit" to="Form" smooth={true} duration={1000}>
-            <Update>Editar</Update>
-          </Lk>
-          <Items>
-            <Clear>Borrar</Clear>
-          </Items>
+          {state.map((value) => {
+            return (
+              <SubDiv>
+                <Items>{value.nombre}</Items>
+                <Lk className="Edit" to="Form" smooth={true} duration={1000}>
+                  <Update onClick={() => UpdateIn(value)}>Editar</Update>
+                </Lk>
+                <Items>
+                  <Clear onClick={() => deleteCarrera(value.id)}>Borrar</Clear>
+                </Items>
+              </SubDiv>
+            );
+          })}
         </CarreraTab>
       </Main>
     </Body>

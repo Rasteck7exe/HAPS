@@ -16,7 +16,7 @@ import AdForm1 from "./adminform1";
 import AdForm2 from "./adminform2";
 import AdForm3 from "./adminform3";
 import { Header, List, Nav, Li, Exit } from "../elements/baseRutas";
-
+// import Querys from "../components/querys";
 // This example has 3 pages: a public page, a protected
 // page, and a login screen. In order to see the protected
 // page, you must first login. Pretty standard stuff.

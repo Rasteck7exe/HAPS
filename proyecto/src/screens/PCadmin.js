@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-
+import firebase from "../firebase/conexion";
 import {
   Body,
   Aside,
@@ -15,6 +15,18 @@ import {
 } from "../elements/basePCadmin";
 
 const App = () => {
+  const [state, setState] = useState(null);
+  useEffect(() => {
+    firebase.db.collection("asistencia").onSnapshot((querySnapshot) => {
+      const docs = [];
+      querySnapshot.forEach((doc) => {
+        docs.push({ ...doc.data(), id: doc.id });
+        console.log(docs);
+      });
+      setState(docs);
+    });
+  }, []);
+
   return (
     <Body>
       <Aside>
@@ -83,94 +95,13 @@ const App = () => {
           <ItemName>Hora de Entrada</ItemName>
           <ItemName>Hora de Salida</ItemName>
           <ItemName>Observaciones</ItemName>
-
-          <Items>1</Items>
-          <Items>2</Items>
-          <Items>3</Items>
-          <Items>4</Items>
-          <Items>5</Items>
-          <Items>6</Items>
-          <Items>7</Items>
-
-          <Items>1</Items>
-          <Items>2</Items>
-          <Items>3</Items>
-          <Items>4</Items>
-          <Items>5</Items>
-          <Items>6</Items>
-          <Items>7</Items>
-
-          <Items>1</Items>
-          <Items>2</Items>
-          <Items>3</Items>
-          <Items>4</Items>
-          <Items>5</Items>
-          <Items>6</Items>
-          <Items>7</Items>
-
-          <Items>1</Items>
-          <Items>2</Items>
-          <Items>3</Items>
-          <Items>4</Items>
-          <Items>5</Items>
-          <Items>6</Items>
-          <Items>7</Items>
-
-          <Items>1</Items>
-          <Items>2</Items>
-          <Items>3</Items>
-          <Items>4</Items>
-          <Items>5</Items>
-          <Items>6</Items>
-          <Items>7</Items>
-
-          <Items>1</Items>
-          <Items>2</Items>
-          <Items>3</Items>
-          <Items>4</Items>
-          <Items>5</Items>
-          <Items>6</Items>
-          <Items>7</Items>
-
-          <Items>1</Items>
-          <Items>2</Items>
-          <Items>3</Items>
-          <Items>4</Items>
-          <Items>5</Items>
-          <Items>6</Items>
-          <Items>7</Items>
-
-          <Items>1</Items>
-          <Items>2</Items>
-          <Items>3</Items>
-          <Items>4</Items>
-          <Items>5</Items>
-          <Items>6</Items>
-          <Items>7</Items>
-
-          <Items>1</Items>
-          <Items>2</Items>
-          <Items>3</Items>
-          <Items>4</Items>
-          <Items>5</Items>
-          <Items>6</Items>
-          <Items>7</Items>
-
-          <Items>1</Items>
-          <Items>2</Items>
-          <Items>3</Items>
-          <Items>4</Items>
-          <Items>5</Items>
-          <Items>6</Items>
-          <Items>7</Items>
-
-          <Items>1</Items>
-          <Items>2</Items>
-          <Items>3</Items>
-          <Items>4</Items>
-          <Items>5</Items>
-          <Items>6</Items>
-          <Items>7</Items>
+          {/* {state.map((value) => {
+            return (
+              <div>
+                <Items>{value.materia}</Items>
+              </div>
+            );
+          })} */}
         </Log>
       </Main>
     </Body>

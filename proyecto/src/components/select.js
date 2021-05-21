@@ -11,8 +11,8 @@ const CompSelect = ({ list, label, name, estado, cambiarEstado }) => {
       <Select name={name} onChange={onChange}>
         {list.map((value) => {
           return (
-            <option key={value.id} value={value.data}>
-              {value.data}
+            <option key={value.id} value={value.nombre}>
+              {value.nombre}
             </option>
           );
         })}

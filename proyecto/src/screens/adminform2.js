@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 //Elemetos para estilos
 import {
   Formulario,
@@ -26,6 +26,7 @@ import {
   MenuButtom,
   ClaseTab,
   Lbl,
+  SubDiv3,
 } from "../elements/basePCadmin";
 //Componentes para seleccionar Fecha con Hora
 import DatePicker from "react-datepicker";
@@ -37,7 +38,12 @@ import Input from "../components/input";
 import Select from "../components/select";
 //Rutas
 import { Link } from "react-router-dom";
+
+import firebase from "../firebase/conexion";
+
 const App = () => {
+  const [carrera, setCarrera] = useState({ campo: "" });
+  const [dia, setDia] = useState({ campo: "" });
   const [profesores, setProfesores] = useState({ campo: "" });
   const [start, setStart] = useState(new Date());
   const [finish, setFinish] = useState(new Date());
@@ -46,12 +52,93 @@ const App = () => {
   const [grupo, cambiarGrupo] = useState({ campo: "", valido: null });
   const [formularioValido, cambiarFormularioValido] = useState(null);
 
+  const [In, setIn] = useState({
+    id: "",
+    materia: "Procesamiento de Imagenes",
+    aula: "F12",
+    grupo: "S7",
+  });
+  const [statecarrera, setStatecarrera] = useState([]);
+  const [stateprofesores, setStateprofesores] = useState([]);
+  const [clases, setClases] = useState([]);
+
+  useEffect(() => {
+    firebase.db.collection("carrera").onSnapshot((querySnapshot) => {
+      const docs = [];
+      querySnapshot.forEach((doc) => {
+        docs.push({ ...doc.data(), id: doc.id });
+      });
+      setStatecarrera(docs);
+    });
+    firebase.db.collection("docentes").onSnapshot((querySnapshot) => {
+      const docs = [];
+      querySnapshot.forEach((doc) => {
+        docs.push({ ...doc.data(), id: doc.id });
+      });
+      setStateprofesores(docs);
+    });
+    firebase.db.collection("clases").onSnapshot((querySnapshot) => {
+      const docs = [];
+      querySnapshot.forEach((doc) => {
+        docs.push({ ...doc.data(), id: doc.id });
+      });
+      setClases(docs);
+    });
+  }, []);
   const expresiones = {
     materia: /^[a-zA-ZÀ-ÿ\s]{1,40}$/, // Letras y espacios, pueden llevar acentos.
     aula: /^[a-zA-Z0-9_-]{2,10}$/, // Letras, numeros, guion y guion_bajo
     grupo: /^[a-zA-Z0-9_-]{2,10}$/, // Letras, numeros, guion y guion_bajo
   };
-
+  const saveClases = async (mat, aul, grup, doce, day, car, ent, sld) => {
+    await firebase.db
+      .collection("clases")
+      .doc()
+      .set({
+        materia: mat,
+        aula: aul,
+        grupo: grup,
+        docentes: doce,
+        dia: day,
+        carrera: car,
+        entrada: ent.getHours() + ":" + ent.getMinutes(),
+        salida: sld.getHours() + ":" + sld.getMinutes(),
+      });
+    // console.log("guardado exitosamente la carrera");
+  };
+  const deleteClases = async (id) => {
+    await firebase.db.collection("clases").doc(id).delete();
+  };
+  const UpdateIn = async (value) => {
+    setIn(value);
+    console.log(value);
+  };
+  const actualizarClases = async (
+    id,
+    mat,
+    aul,
+    grup,
+    doce,
+    day,
+    car,
+    ent,
+    sld
+  ) => {
+    await firebase.db
+      .collection("clases")
+      .doc(id)
+      .update({
+        materia: mat,
+        aula: aul,
+        grupo: grup,
+        docentes: doce,
+        dia: day,
+        carrera: car,
+        entrada: ent.getHours() + ":" + ent.getMinutes(),
+        salida: sld.getHours() + ":" + sld.getMinutes(),
+      });
+    console.log("Actualiza");
+  };
   const onSubmit = (e) => {
     if (
       materia.valido === "true" &&
@@ -62,13 +149,26 @@ const App = () => {
       cambiarMateria({ campo: "", valido: "" });
       cambiarAula({ campo: "", valido: null });
       cambiarGrupo({ campo: "", valido: null });
+      saveClases(
+        materia.campo,
+        aula.campo,
+        grupo.campo,
+        profesores.campo,
+        dia.campo,
+        carrera.campo,
+        start,
+        finish
+      );
       e.preventDefault();
     } else {
       cambiarFormularioValido(false);
       e.preventDefault();
     }
   };
-  const onPress = (e) => {
+  const onPress = () => {
+    console.log(materia.valido);
+    console.log(aula.valido);
+    console.log(grupo.valido);
     if (
       materia.valido === "true" &&
       aula.valido === "true" &&
@@ -78,17 +178,29 @@ const App = () => {
       cambiarMateria({ campo: "", valido: "" });
       cambiarAula({ campo: "", valido: null });
       cambiarGrupo({ campo: "", valido: null });
-      e.preventDefault();
+      actualizarClases(
+        In.id,
+        materia.campo,
+        aula.campo,
+        grupo.campo,
+        profesores.campo,
+        dia.campo,
+        carrera.campo,
+        start,
+        finish
+      );
     } else {
       cambiarFormularioValido(false);
-      e.preventDefault();
     }
   };
-  const pb = [
-    { id: "1", data: "one" },
-    { id: "2", data: "two" },
-    { id: "3", data: "oneasdddddddddddd" },
-    { id: "4", data: "twoasddddd" },
+  const semana = [
+    { id: "1", nombre: "Lunes" },
+    { id: "2", nombre: "Martes" },
+    { id: "3", nombre: "Miercoles" },
+    { id: "4", nombre: "Jueves" },
+    { id: "5", nombre: "Viernes" },
+    { id: "6", nombre: "Sabado" },
+    { id: "7", nombre: "Domingo" },
   ];
   return (
     <Body>
@@ -157,7 +269,7 @@ const App = () => {
               cambiarEstado={cambiarMateria}
               tipo="text"
               label="Ingresa Nombre de la Materia"
-              placeholder="Procesamiento de Imagenes"
+              placeholder={In.materia}
               name="materia"
               leyendaError="Solo puede contener numeros, letras y guion bajo."
               expresionR={expresiones.materia}
@@ -167,7 +279,7 @@ const App = () => {
               cambiarEstado={cambiarAula}
               tipo="text"
               label="Ingresa la Aula correspondiente"
-              placeholder="F12"
+              placeholder={In.aula}
               name="aula"
               leyendaError="Solo puede contener numeros, letras y guion bajo."
               expresionR={expresiones.aula}
@@ -177,17 +289,32 @@ const App = () => {
               cambiarEstado={cambiarGrupo}
               tipo="text"
               label="Ingresa el Grupo correspondiente"
-              placeholder="S7"
+              placeholder={In.grupo}
               name="grupo"
               leyendaError="Solo puede contener numeros, letras y guion bajo."
-              expresionR={expresiones.aula}
+              expresionR={expresiones.grupo}
             />
+            {/* {console.log(statecarrera)} */}
             <Select
-              list={pb}
+              list={stateprofesores}
               label="Selecciona un Docente"
               name="Profesores"
               estado={profesores}
               cambiarEstado={setProfesores}
+            />
+            <Select
+              list={semana}
+              label="Selecciona El dia de la semana"
+              name="dia"
+              estado={dia}
+              cambiarEstado={setDia}
+            />
+            <Select
+              list={statecarrera}
+              label="Selecciona la carrera correspondiente"
+              name="Carreras"
+              estado={carrera}
+              cambiarEstado={setCarrera}
             />
             <div>
               <Lbl>Selecciona Hora de Inicio</Lbl>
@@ -228,7 +355,7 @@ const App = () => {
             <ContenedorCentrado>
               <Send type="submit">Registrar</Send>
               <SaveUp
-                onKeyPress={() => {
+                onClick={() => {
                   onPress();
                 }}
               >
@@ -246,23 +373,34 @@ const App = () => {
           <ItemName>Aula</ItemName>
           <ItemName>Grupo</ItemName>
           <ItemName>Profesor</ItemName>
+          <ItemName>Carrera</ItemName>
+          <ItemName>Dia</ItemName>
           <ItemName>Hora Inicio</ItemName>
           <ItemName>Hora Salida</ItemName>
           <ItemName></ItemName>
           <ItemName></ItemName>
+          {/* {console.log(statecarrera)} */}
           {/* Items */}
-          <Items>1</Items>
-          <Items>2</Items>
-          <Items>3</Items>
-          <Items>4</Items>
-          <Items>5</Items>
-          <Items>6</Items>
-          <Lk className="Edit" to="Form" smooth={true} duration={1000}>
-            <Update>Editar</Update>
-          </Lk>
-          <Items>
-            <Clear>Borrar</Clear>
-          </Items>
+          {clases.map((value) => {
+            return (
+              <SubDiv3>
+                <Items>{value.materia}</Items>
+                <Items>{value.aula}</Items>
+                <Items>{value.grupo}</Items>
+                <Items>{value.docentes}</Items>
+                <Items>{value.carrera}</Items>
+                <Items>{value.dia}</Items>
+                <Items>{value.entrada.toString()} hrs.</Items>
+                <Items>{value.salida.toString()} hrs.</Items>
+                <Lk className="Edit" to="Form" smooth={true} duration={1000}>
+                  <Update onClick={() => UpdateIn(value)}>Editar</Update>
+                </Lk>
+                <Items>
+                  <Clear onClick={() => deleteClases(value.id)}>Borrar</Clear>
+                </Items>
+              </SubDiv3>
+            );
+          })}
         </ClaseTab>
       </Main>
     </Body>

@@ -86,7 +86,7 @@ const ClaseTab = styled.div`
   border-radius: 15px;
   display: grid;
   grid-gap: 5px;
-  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
   grid-template-rows: 1fr;
   grid-auto-rows: 1fr;
 `;
@@ -193,6 +193,31 @@ const Lbl = styled.form`
   min-height: 40px;
   cursor: pointer;
 `;
+const SubDiv = styled.div`
+  grid-column: span 3;
+  display: grid;
+  grid-gap: 5px;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 1fr;
+  grid-auto-rows: 1fr;
+`;
+const SubDiv2 = styled.div`
+  grid-column: span 4;
+  display: grid;
+  grid-gap: 5px;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-rows: 1fr;
+  grid-auto-rows: 1fr;
+`;
+const SubDiv3 = styled.div`
+  grid-column: span 10;
+  display: grid;
+  grid-gap: 5px;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+  grid-template-rows: 1fr;
+  grid-auto-rows: 1fr;
+`;
+
 export {
   Body,
   Aside,
@@ -213,4 +238,7 @@ export {
   Clear,
   Update,
   Lbl,
+  SubDiv,
+  SubDiv2,
+  SubDiv3,
 };

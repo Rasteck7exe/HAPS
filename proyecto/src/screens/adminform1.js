@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Formulario, Send, Exito, Error, SaveUp } from "../elements/pc";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faExclamationTriangle } from "@fortawesome/free-solid-svg-icons";
@@ -20,12 +20,19 @@ import {
   Update,
   MenuButtom,
   BackButtom,
+  SubDiv2,
 } from "../elements/basePCadmin";
+import firebase from "../firebase/conexion";
 
 const App = () => {
   const [usuario, cambiarUsuario] = useState({ campo: "", valido: null });
   const [nombre, cambiarNombre] = useState({ campo: "", valido: null });
   const [formularioValido, cambiarFormularioValido] = useState(null);
+  const [In, setIn] = useState({
+    id: "",
+    nocuenta: "1774280",
+    nombre: "César",
+  });
 
   const expresiones = {
     usuario: /^[0-9]{7}$/, // Letras, numeros, guion y guion_bajo
@@ -34,29 +41,60 @@ const App = () => {
     correo: /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/,
     telefono: /^\d{7,14}$/, // 7 a 14 numeros.
   };
-
+  const [state, setState] = useState([]);
+  useEffect(() => {
+    firebase.db.collection("docentes").onSnapshot((querySnapshot) => {
+      const docs = [];
+      querySnapshot.forEach((doc) => {
+        docs.push({ ...doc.data(), id: doc.id });
+      });
+      setState(docs);
+      console.log(docs);
+    });
+  }, []);
+  const saveProfesores = async (NoCuenta, name) => {
+    await firebase.db
+      .collection("docentes")
+      .doc()
+      .set({ nocuenta: NoCuenta, nombre: name });
+    // console.log("guardado exitosamente la carrera");
+  };
+  const deleteProfesores = async (id) => {
+    await firebase.db.collection("docentes").doc(id).delete();
+  };
+  const UpdateIn = async (value) => {
+    setIn(value);
+    console.log(value);
+  };
+  const actualizarProfesores = async (id, NoCuenta, name) => {
+    await firebase.db
+      .collection("docentes")
+      .doc(id)
+      .update({ nocuenta: NoCuenta, nombre: name });
+    console.log("Actualiza");
+  };
   const onSubmit = (e) => {
     if (usuario.valido === "true" && nombre.valido === "true") {
       cambiarFormularioValido(true);
       cambiarUsuario({ campo: "", valido: "" });
       cambiarNombre({ campo: "", valido: null });
-      alert("La información se ha actualizado");
+      // alert("La información se ha actualizado");
+      saveProfesores(usuario.campo, nombre.campo);
       e.preventDefault();
     } else {
       cambiarFormularioValido(false);
       e.preventDefault();
     }
   };
-  const onPress = (e) => {
+  const onPress = () => {
     if (usuario.valido === "true" && nombre.valido === "true") {
       cambiarFormularioValido(true);
       cambiarUsuario({ campo: "", valido: "" });
       cambiarNombre({ campo: "", valido: null });
-      alert("La información se ha actualizado");
-      e.preventDefault();
+      // alert("La información se ha actualizado");
+      actualizarProfesores(In.id, usuario.campo, nombre.campo);
     } else {
       cambiarFormularioValido(false);
-      e.preventDefault();
     }
   };
   return (
@@ -126,7 +164,7 @@ const App = () => {
               cambiarEstado={cambiarUsuario}
               tipo="text"
               label="Ingresa el Número de Cuenta"
-              placeholder="1774280"
+              placeholder={In.nocuenta}
               name="usuario"
               leyendaError="El usuario tiene que ser de 7 dígitos y solo puede contener numeros"
               expresionR={expresiones.usuario}
@@ -136,7 +174,7 @@ const App = () => {
               cambiarEstado={cambiarNombre}
               tipo="text"
               label="Ingrese Nombre completo del Docente"
-              placeholder="John Doe"
+              placeholder={In.nombre}
               name="nombre"
               leyendaError="El nombre solo puede contener letras y espacios."
               expresionR={expresiones.nombre}
@@ -152,7 +190,7 @@ const App = () => {
 
             <Send type="submit">Registar</Send>
             <SaveUp
-              onKeyPress={() => {
+              onClick={() => {
                 onPress();
               }}
             >
@@ -171,95 +209,22 @@ const App = () => {
           <ItemName></ItemName>
           <ItemName></ItemName>
           {/* Items */}
-          <Items>1</Items>
-          <Items>2</Items>
-          <Lk className="Edit" to="Form" smooth={true} duration={1000}>
-            <Update>Editar</Update>
-          </Lk>
-          <Items>
-            <Clear>Borrar</Clear>
-          </Items>
-          {/* Items */}
-          <Items>1</Items>
-          <Items>2</Items>
-          <Lk className="Edit" to="Form" smooth={true} duration={1000}>
-            <Update>Editar</Update>
-          </Lk>
-          <Items>
-            <Clear>Borrar</Clear>
-          </Items>
-          {/* Items */}
-          <Items>1</Items>
-          <Items>2</Items>
-          <Lk className="Edit" to="Form" smooth={true} duration={1000}>
-            <Update>Editar</Update>
-          </Lk>
-          <Items>
-            <Clear>Borrar</Clear>
-          </Items>
-          {/* Items */}
-          <Items>1</Items>
-          <Items>2</Items>
-          <Lk className="Edit" to="Form" smooth={true} duration={1000}>
-            <Update>Editar</Update>
-          </Lk>
-          <Items>
-            <Clear>Borrar</Clear>
-          </Items>
-          {/* Items */}
-          <Items>1</Items>
-          <Items>2</Items>
-          <Lk className="Edit" to="Form" smooth={true} duration={1000}>
-            <Update>Editar</Update>
-          </Lk>
-          <Items>
-            <Clear>Borrar</Clear>
-          </Items>
-          {/* Items */}
-          <Items>1</Items>
-          <Items>2</Items>
-          <Lk className="Edit" to="Form" smooth={true} duration={1000}>
-            <Update>Editar</Update>
-          </Lk>
-          <Items>
-            <Clear>Borrar</Clear>
-          </Items>
-          {/* Items */}
-          <Items>1</Items>
-          <Items>2</Items>
-          <Lk className="Edit" to="Form" smooth={true} duration={1000}>
-            <Update>Editar</Update>
-          </Lk>
-          <Items>
-            <Clear>Borrar</Clear>
-          </Items>
-          {/* Items */}
-          <Items>1</Items>
-          <Items>2</Items>
-          <Lk className="Edit" to="Form" smooth={true} duration={1000}>
-            <Update>Editar</Update>
-          </Lk>
-          <Items>
-            <Clear>Borrar</Clear>
-          </Items>
-          {/* Items */}
-          <Items>1</Items>
-          <Items>2</Items>
-          <Lk className="Edit" to="Form" smooth={true} duration={1000}>
-            <Update>Editar</Update>
-          </Lk>
-          <Items>
-            <Clear>Borrar</Clear>
-          </Items>
-          {/* Items */}
-          <Items>1</Items>
-          <Items>2</Items>
-          <Lk className="Edit" to="Form" smooth={true} duration={1000}>
-            <Update>Editar</Update>
-          </Lk>
-          <Items>
-            <Clear>Borrar</Clear>
-          </Items>
+          {state.map((value) => {
+            return (
+              <SubDiv2>
+                <Items>{value.nocuenta}</Items>
+                <Items>{value.nombre}</Items>
+                <Lk className="Edit" to="Form" smooth={true} duration={1000}>
+                  <Update onClick={() => UpdateIn(value)}>Editar</Update>
+                </Lk>
+                <Items>
+                  <Clear onClick={() => deleteProfesores(value.id)}>
+                    Borrar
+                  </Clear>
+                </Items>
+              </SubDiv2>
+            );
+          })}
         </ProfesorTab>
       </Main>
     </Body>
