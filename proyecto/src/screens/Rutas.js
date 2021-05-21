@@ -8,9 +8,14 @@ import {
   useHistory,
   useLocation,
 } from "react-router-dom";
+// Screens
 import App from "./App";
 import Log1 from "./Admin";
 import PCa from "./PCadmin";
+import AdForm1 from "./adminform1";
+import AdForm2 from "./adminform2";
+import AdForm3 from "./adminform3";
+import { Header, List, Nav, Li, Exit } from "../elements/baseRutas";
 
 // This example has 3 pages: a public page, a protected
 // page, and a login screen. In order to see the protected
@@ -32,6 +37,49 @@ export default function AuthExample() {
     <ProvideAuth>
       <Router>
         {/* <div> */}
+        <Header>
+          <Nav>
+            <List>
+              <Li>
+                <Link
+                  to="/public"
+                  style={{
+                    fontSize: "large",
+                    fontWeight: "bold",
+                    listStyle: 0,
+                    color: "#fff",
+                    textDecoration: 0,
+                    justifySelf: "stretch",
+                    alignSelf: "stretch",
+                    // hover: true,
+                  }}
+                >
+                  Registro de Hora
+                </Link>
+              </Li>
+              <Li>
+                <Link
+                  to="/protected"
+                  style={{
+                    fontSize: "large",
+                    fontWeight: "bold",
+                    listStyle: 0,
+                    color: "#fff",
+                    textDecoration: 0,
+                    justifySelf: "stretch",
+                    alignSelf: "stretch",
+                    // hover: true,
+                  }}
+                >
+                  Iniciar como administrador
+                </Link>
+              </Li>
+              <Li>
+                <AuthButton />
+              </Li>
+            </List>
+          </Nav>
+        </Header>
 
         <Switch>
           <Route path="/" exact>
@@ -43,21 +91,20 @@ export default function AuthExample() {
           <Route path="/login">
             <LoginPage />
           </Route>
-          <PrivateRoute path="/protected">
+          <PrivateRoute path="/protected" exact>
             <ProtectedPage />
+          </PrivateRoute>
+          <PrivateRoute path="/protected/form1">
+            <AdForm1 />
+          </PrivateRoute>
+          <PrivateRoute path="/protected/form2">
+            <AdForm2 />
+          </PrivateRoute>
+          <PrivateRoute path="/protected/form3">
+            <AdForm3 />
           </PrivateRoute>
         </Switch>
         {/* </div> */}
-        <AuthButton />
-
-        <ul>
-          <li>
-            <Link to="/public">Public Page</Link>
-          </li>
-          <li>
-            <Link to="/protected">Protected Page</Link>
-          </li>
-        </ul>
       </Router>
     </ProvideAuth>
   );
@@ -81,21 +128,21 @@ const fakeAuth = {
  */
 const authContext = createContext();
 
-function ProvideAuth({ children }) {
+const ProvideAuth = ({ children }) => {
   const auth = useProvideAuth();
   return <authContext.Provider value={auth}>{children}</authContext.Provider>;
-}
+};
 
-function useAuth() {
+const useAuth = () => {
   return useContext(authContext);
-}
+};
 
-function useProvideAuth() {
+const useProvideAuth = () => {
   const [user, setUser] = useState(null);
 
   const signin = (cb) => {
     return fakeAuth.signin(() => {
-      setUser("user");
+      setUser("Admin");
       cb();
     });
   };
@@ -112,32 +159,29 @@ function useProvideAuth() {
     signin,
     signout,
   };
-}
+};
 
-function AuthButton() {
-  let history = useHistory();
-  let auth = useAuth();
+const AuthButton = () => {
+  var history = useHistory();
+  var auth = useAuth();
 
   return auth.user ? (
-    <p>
-      Welcome!{" "}
-      <button
-        onClick={() => {
-          auth.signout(() => history.push("/"));
-        }}
-      >
-        Sign out
-      </button>
-    </p>
+    <Exit
+      onClick={() => {
+        auth.signout(() => history.push("/"));
+      }}
+    >
+      Cerrar Sesión
+    </Exit>
   ) : (
-    <p>You are not logged in.</p>
+    <p>Eres administrador?, Tu sesión esta Cerrada</p>
   );
-}
+};
 
 // A wrapper for <Route> that redirects to the login
 // screen if you're not yet authenticated.
-function PrivateRoute({ children, ...rest }) {
-  let auth = useAuth();
+const PrivateRoute = ({ children, ...rest }) => {
+  var auth = useAuth();
   return (
     <Route
       {...rest}
@@ -155,33 +199,27 @@ function PrivateRoute({ children, ...rest }) {
       }
     />
   );
-}
+};
 
-function PublicPage() {
+const PublicPage = () => {
   return <App />;
-}
+};
 
-function ProtectedPage() {
+const ProtectedPage = () => {
   return <PCa />;
-}
+};
 
-function LoginPage() {
-  let history = useHistory();
-  let location = useLocation();
-  let auth = useAuth();
+const LoginPage = () => {
+  var history = useHistory();
+  var location = useLocation();
+  var auth = useAuth();
 
-  let { from } = location.state || { from: { pathname: "/" } };
-  let login = () => {
+  var { from } = location.state || { from: { pathname: "/" } };
+  var login = () => {
     auth.signin(() => {
       history.replace(from);
     });
   };
 
-  return (
-    <div>
-      <Log1 />
-      <p>You must log in to view the page at {from.pathname}</p>
-      <button onClick={login}>Log in</button>
-    </div>
-  );
-}
+  return <Log1 NavLog={login} />;
+};

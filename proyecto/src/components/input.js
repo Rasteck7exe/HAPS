@@ -5,7 +5,7 @@ import {
   Input,
   LeyendaError,
   IconoValidacion,
-} from "./../elements/log";
+} from "./../elements/styleInput";
 
 import {
   faCheckCircle,

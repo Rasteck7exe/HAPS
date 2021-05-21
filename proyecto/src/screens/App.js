@@ -5,12 +5,12 @@ import {
   Send,
   Exito,
   Error,
-} from "../elements/log";
+} from "../elements/styleInput";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faExclamationTriangle } from "@fortawesome/free-solid-svg-icons";
 import { Title, Div, Log, H1, Cont } from "../elements/baselog";
 import Input from "../components/input";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 
 const App = () => {
   const [usuario, cambiarUsuario] = useState({ campo: "", valido: null });
@@ -46,6 +46,7 @@ const App = () => {
     if (usuario.valido === "true") {
       cambiarFormularioValido(true);
       cambiarUsuario({ campo: "", valido: "" });
+      e.preventDefault();
     } else {
       cambiarFormularioValido(false);
       e.preventDefault();

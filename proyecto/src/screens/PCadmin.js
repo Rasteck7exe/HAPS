@@ -1,74 +1,179 @@
-import React, { useState } from "react";
+import React from "react";
+import { Link } from "react-router-dom";
 
 import {
+  Body,
+  Aside,
+  MenuButtom,
   Main,
   Title,
   Div,
   Log,
   H1,
-  H2,
-  HR,
   ItemName,
+  Items,
 } from "../elements/basePCadmin";
 
 const App = () => {
   return (
-    <Main>
-      <Title>
-        <H1>Este es el panel de control del Admin</H1>
-      </Title>
-      <Div></Div>
-      <Log>
-        <ItemName>
-          <H2>Nombre</H2>
-        </ItemName>
-        <ItemName>
-          <H2>Aula</H2>
-        </ItemName>
-        <ItemName>
-          <H2>Grupo</H2>
-        </ItemName>
-        <ItemName>
-          <H2>Fecha</H2>
-        </ItemName>
-        <ItemName>
-          <H2>Hora de Entrada</H2>
-        </ItemName>
-        <ItemName>
-          <H2>Hora de Salida</H2>
-        </ItemName>
-        <ItemName>
-          <H2>Observaciones</H2>
-        </ItemName>
-        <HR>
-          <hr />
-        </HR>
-        <ItemName>
-          <H2>1</H2>
-        </ItemName>
-        <ItemName>
-          <H2>2</H2>
-        </ItemName>
-        <ItemName>
-          <H2>3</H2>
-        </ItemName>
-        <ItemName>
-          <H2>4</H2>
-        </ItemName>
-        <ItemName>
-          <H2>5</H2>
-        </ItemName>
-        <ItemName>
-          <H2>6</H2>
-        </ItemName>
-        <ItemName>
-          <H2>7</H2>
-        </ItemName>
-        <HR>
-          <hr />
-        </HR>
-      </Log>
-    </Main>
+    <Body>
+      <Aside>
+        <MenuButtom>
+          <Link
+            to="/protected/form1"
+            style={{
+              fontSize: "large",
+              fontWeight: "bold",
+              listStyle: 0,
+              color: "#fff",
+              textDecoration: 0,
+              justifySelf: "stretch",
+              alignSelf: "stretch",
+              // hover: true,
+            }}
+          >
+            Profesores
+          </Link>
+        </MenuButtom>
+        <MenuButtom>
+          <Link
+            to="/protected/form2"
+            style={{
+              fontSize: "large",
+              fontWeight: "bold",
+              listStyle: 0,
+              color: "#fff",
+              textDecoration: 0,
+              justifySelf: "stretch",
+              alignSelf: "stretch",
+              // hover: true,
+            }}
+          >
+            Clases
+          </Link>
+        </MenuButtom>
+        <MenuButtom>
+          <Link
+            to="/protected/form3"
+            style={{
+              fontSize: "large",
+              fontWeight: "bold",
+              listStyle: 0,
+              color: "#fff",
+              textDecoration: 0,
+              justifySelf: "stretch",
+              alignSelf: "stretch",
+              // hover: true,
+            }}
+          >
+            Carreras
+          </Link>
+        </MenuButtom>
+      </Aside>
+      <Main>
+        <Title>
+          <H1>Este es el panel de control del Admin</H1>
+        </Title>
+        <Div></Div>
+        <Log>
+          <ItemName>Nombre</ItemName>
+          <ItemName>Aula</ItemName>
+          <ItemName>Grupo</ItemName>
+          <ItemName>Fecha</ItemName>
+          <ItemName>Hora de Entrada</ItemName>
+          <ItemName>Hora de Salida</ItemName>
+          <ItemName>Observaciones</ItemName>
+
+          <Items>1</Items>
+          <Items>2</Items>
+          <Items>3</Items>
+          <Items>4</Items>
+          <Items>5</Items>
+          <Items>6</Items>
+          <Items>7</Items>
+
+          <Items>1</Items>
+          <Items>2</Items>
+          <Items>3</Items>
+          <Items>4</Items>
+          <Items>5</Items>
+          <Items>6</Items>
+          <Items>7</Items>
+
+          <Items>1</Items>
+          <Items>2</Items>
+          <Items>3</Items>
+          <Items>4</Items>
+          <Items>5</Items>
+          <Items>6</Items>
+          <Items>7</Items>
+
+          <Items>1</Items>
+          <Items>2</Items>
+          <Items>3</Items>
+          <Items>4</Items>
+          <Items>5</Items>
+          <Items>6</Items>
+          <Items>7</Items>
+
+          <Items>1</Items>
+          <Items>2</Items>
+          <Items>3</Items>
+          <Items>4</Items>
+          <Items>5</Items>
+          <Items>6</Items>
+          <Items>7</Items>
+
+          <Items>1</Items>
+          <Items>2</Items>
+          <Items>3</Items>
+          <Items>4</Items>
+          <Items>5</Items>
+          <Items>6</Items>
+          <Items>7</Items>
+
+          <Items>1</Items>
+          <Items>2</Items>
+          <Items>3</Items>
+          <Items>4</Items>
+          <Items>5</Items>
+          <Items>6</Items>
+          <Items>7</Items>
+
+          <Items>1</Items>
+          <Items>2</Items>
+          <Items>3</Items>
+          <Items>4</Items>
+          <Items>5</Items>
+          <Items>6</Items>
+          <Items>7</Items>
+
+          <Items>1</Items>
+          <Items>2</Items>
+          <Items>3</Items>
+          <Items>4</Items>
+          <Items>5</Items>
+          <Items>6</Items>
+          <Items>7</Items>
+
+          <Items>1</Items>
+          <Items>2</Items>
+          <Items>3</Items>
+          <Items>4</Items>
+          <Items>5</Items>
+          <Items>6</Items>
+          <Items>7</Items>
+
+          <Items>1</Items>
+          <Items>2</Items>
+          <Items>3</Items>
+          <Items>4</Items>
+          <Items>5</Items>
+          <Items>6</Items>
+          <Items>7</Items>
+        </Log>
+      </Main>
+    </Body>
   );
 };
 

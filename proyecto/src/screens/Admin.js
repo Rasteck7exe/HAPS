@@ -5,14 +5,14 @@ import {
   Send,
   Exito,
   Error,
-} from "../elements/log";
+} from "../elements/styleInput";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faExclamationTriangle } from "@fortawesome/free-solid-svg-icons";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 import { Title, Div, Log, H1, Cont } from "../elements/baselog";
 import Input from "../components/input";
 
-const App = () => {
+const App = (props) => {
   const [usuario, cambiarUsuario] = useState({ campo: "", valido: null });
   const [password, cambiarPassword] = useState({ campo: "", valido: null });
   const [formularioValido, cambiarFormularioValido] = useState(null);
@@ -25,29 +25,13 @@ const App = () => {
     telefono: /^\d{7,14}$/, // 7 a 14 numeros.
   };
 
-  // const validarpswd = () => {
-  //   if (password.campo.length > 0) {
-  //     if (password.campo !== password2.campo) {
-  //       cambiarPassword2((prevState) => {
-  //         return { ...prevState, valido: "false" };
-  //       });
-  //     } else {
-  //       cambiarPassword2((prevState) => {
-  //         return { ...prevState, valido: "true" };
-  //       });
-  //     }
-  //   }
-  // };
-
-  // const onChangeTerminos = (e) => {
-  //   cambiarTerminos(e.target.checked);
-  // };
-
   const onSubmit = (e) => {
     if (usuario.valido === "true" && password.valido === "true") {
       cambiarFormularioValido(true);
       cambiarUsuario({ campo: "", valido: "" });
       cambiarPassword({ campo: "", valido: null });
+      props.NavLog();
+      e.preventDefault();
     } else {
       cambiarFormularioValido(false);
       e.preventDefault();
@@ -59,7 +43,7 @@ const App = () => {
       {/* <H1>Proyecto HAPS</H1> */}
       <Log>
         <Title>
-          <H1>Universidad Autonoma del Estado de México</H1>
+          <H1>Ingresar como Administrador</H1>
         </Title>
         <Div></Div>
         <Cont>
