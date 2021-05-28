@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Formulario,
   ContenedorCentrado,
@@ -25,7 +25,15 @@ const App = () => {
   const expresiones = {
     usuario: /^[0-9_-]{7}$/, // Letras, numeros, guion y guion_bajo
   };
-
+  useEffect(() => {
+    firebase.db.collection("docentes").onSnapshot((querySnapshot) => {
+      const docs = [];
+      querySnapshot.forEach((doc) => {
+        docs.push({ ...doc.data(), id: doc.id });
+      });
+    });
+    // console.log(docs);
+  }, []);
   const BusquedaClass = async (docentes) => {
     var name = null;
     await firebase.db
@@ -125,16 +133,16 @@ const App = () => {
     e.preventDefault();
     if (usuario.valido === "true") {
       cambiarFormularioValido(true);
-      BusquedaDoc(usuario.campo);
-      setStart(new Date());
-      // console.log(profesores.nombre);
-      saveEntrada(
-        profesores.nombre,
-        clases.aula,
-        clases.grupo,
-        clases.dia,
-        start
-      );
+      // BusquedaDoc(usuario.campo);
+      // setStart(new Date());
+      // // console.log(profesores.nombre);
+      // saveEntrada(
+      //   profesores.nombre,
+      //   clases.aula,
+      //   clases.grupo,
+      //   clases.dia,
+      //   start
+      // );
       cambiarUsuario({ campo: "", valido: "" });
     } else {
       cambiarFormularioValido(false);
@@ -143,20 +151,20 @@ const App = () => {
   const onChange = () => {
     if (usuario.valido === "true") {
       cambiarFormularioValido(true);
-      BusquedaDoc(usuario.campo);
-      setFinish(new Date());
-      saveSalida(profesores.nombre, finish);
-      // cambiarUsuario({ campo: "", valido: "" });
+      // BusquedaDoc(usuario.campo);
+      // setFinish(new Date());
+      // saveSalida(profesores.nombre, finish);
+      cambiarUsuario({ campo: "", valido: "" });
     } else {
       cambiarFormularioValido(false);
 
-      BusquedaDoc(usuario.campo);
-      // getidAssist();
-      console.log(profesores);
-      console.log(clases);
-      setFinish(new Date());
-      saveSalida(profesores.nombre, finish);
-      // cambiarUsuario({ campo: "", valido: "" });
+      // BusquedaDoc(usuario.campo);
+      // // getidAssist();
+      // console.log(profesores);
+      // console.log(clases);
+      // setFinish(new Date());
+      // saveSalida(profesores.nombre, finish);
+      cambiarUsuario({ campo: "", valido: "" });
     }
   };
   return (
